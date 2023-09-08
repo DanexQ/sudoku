@@ -1,8 +1,9 @@
-import { MouseEventHandler, useRef } from "react";
+import { useRef } from "react";
+import "./cell.scss";
 
 type CellType = {
   value: string;
-  handleClick: MouseEventHandler<HTMLDivElement>;
+  handleClick: (prevValue: string) => void;
   handleRemoveListener: () => void;
   disabled: boolean;
 };
@@ -24,12 +25,8 @@ const Cell = ({
       onChange={() => {
         ref?.current?.blur();
       }}
-      className={`text-center w-12 h-12 border text-gray-200 text-lg font-bold border-gray-200 hover:cursor-pointer ${
-        disabled
-          ? "bg-neutral-700"
-          : "bg-neutral-900 focus:bg-blue-600 focus:outline-none focus:border"
-      }`}
-      onClick={handleClick}
+      className={`cell ${disabled ? "cell--disabled" : "cell--enabled"}`}
+      onClick={() => handleClick(value)}
       onBlur={() => handleRemoveListener()}
       disabled={disabled}
     />

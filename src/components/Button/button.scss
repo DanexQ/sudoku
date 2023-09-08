@@ -1,0 +1,29 @@
+@mixin theme($theme) {
+  color: $theme;
+  border: 1px solid $theme;
+  background-color: transparent;
+}
+
+.button {
+  padding: 10px 20px;
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.1s;
+  @include theme(rgb(229, 231, 235));
+
+  &:hover {
+    filter: brightness(80%);
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+
+  &--undo {
+    @include theme(rgb(251 146 60));
+  }
+}

@@ -1,9 +1,10 @@
 import { useEffect } from "react";
-import "./App.css";
 import { useAppDispatch } from "./hooks/useAppDispatch";
 import { fetchBoard } from "./redux/slices/boardSlice";
 // import { useAppSelector } from "./hooks/useAppSelector";
 import Grid from "./components/Grid";
+import "./App.scss";
+import UndoMove from "./components/ButtonUndo";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -12,9 +13,10 @@ function App() {
   }, []);
 
   return (
-    <div className="flex justify-center items-center w-full h-full bg-neutral-900">
+    <main className="container">
       <Grid />
-    </div>
+      <UndoMove />
+    </main>
   );
 }
 

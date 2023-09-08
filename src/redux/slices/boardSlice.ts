@@ -1,6 +1,10 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { RootState } from "../store";
+import { PrevValue, undoMove } from "./moveHistorySlice";
+import { Move } from "./types";
+
+export type NewMove = Omit<Move, "prevValue">;
 
 type Board = {
   value: string[][];
@@ -31,17 +35,11 @@ const initialState: InitialState = {
   error: null,
 };
 
-type ChangeCellValue = {
-  x: number;
-  y: number;
-  value: string;
-};
-
 export const board = createSlice({
   name: "board",
   initialState: initialState,
   reducers: {
-    changeCellValue: (state, action: PayloadAction<ChangeCellValue>) => {
+    changeCellValue: (state, action: PayloadAction<NewMove>) => {
       const { x, y, value } = action.payload;
       state.data.value[y][x] = value;
     },
@@ -62,6 +60,11 @@ export const board = createSlice({
       .addCase(fetchBoard.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message || null;
+      })
+      .addCase(undoMove, (state, action: PayloadAction<PrevValue>) => {
+        const { x, y, prevValue } = action.payload;
+        console.log(action.payload);
+        state.data.value[y][x] = prevValue;
       });
   },
 });

@@ -1,0 +1,31 @@
+.cell {
+  width: 48px;
+  height: 48px;
+  font-size: 18px;
+  font-weight: 700;
+  color: rgb(229, 231, 235);
+  border: 1px solid rgb(229, 231, 235);
+  text-align: center;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &--enabled {
+    background-color: rgb(23 23 23);
+
+    &:focus {
+      background-color: rgb(37 99 235);
+      outline: none;
+    }
+  }
+
+  &--disabled {
+    background-color: rgb(64 64 64);
+  }
+
+  &:nth-child(4),
+  &:nth-child(7) {
+    margin-left: 0.5rem;
+  }
+}
