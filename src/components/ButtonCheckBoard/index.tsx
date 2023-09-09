@@ -1,4 +1,3 @@
-import React from "react";
 import Button from "../Button";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { checkBoard } from "../../redux/slices/boardSlice";
