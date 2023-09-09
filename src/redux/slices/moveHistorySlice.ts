@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { NewMove, changeCellValue } from "./boardSlice";
+import { changeCellValue } from "./boardSlice";
 import { RootState } from "../store";
 import { Move } from "./types";
 
@@ -19,17 +19,18 @@ const moveHistory = createSlice({
   name: "moveHistory",
   initialState,
   reducers: {
-    undoMove: (state, action: PayloadAction<Move>) => {
-      const { _, ...prevValue } = action.payload;
+    undoMove: (state, action: PayloadAction<PrevValue>) => {
+      console.log("undoMove", action.payload);
       state.allMoves = state.allMoves.slice(1);
-      state.prevValue = prevValue;
+      state.prevValue = state.allMoves[0];
     },
   },
   extraReducers(builder) {
     builder.addCase(
       changeCellValue,
-      (state, action: PayloadAction<NewMove>) => {
-        console.log(state, action);
+      (state, action: PayloadAction<PrevValue>) => {
+        state.prevValue = action.payload;
+        state.allMoves = [action.payload, ...state.allMoves];
       }
     );
   },

@@ -10,7 +10,6 @@
   font-weight: 700;
   text-transform: uppercase;
   border: none;
-  border-radius: 5px;
   cursor: pointer;
   transition: all 0.1s;
   @include theme(rgb(229, 231, 235));
@@ -25,5 +24,9 @@
 
   &--undo {
     @include theme(rgb(251 146 60));
+  }
+
+  &--check-board {
+    @include theme(rgb(34 197 94));
   }
 }

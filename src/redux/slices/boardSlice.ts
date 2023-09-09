@@ -6,9 +6,12 @@ import { Move } from "./types";
 
 export type NewMove = Omit<Move, "prevValue">;
 
+type Difficulty = "Easy" | "Medium" | "Hard" | null;
+
 type Board = {
-  value: string[][];
-  solution: string[][];
+  value: number[][];
+  solution: number[][];
+  difficulty: Difficulty;
 };
 
 type BoardFetch = {
@@ -20,7 +23,8 @@ type BoardFetch = {
 
 type InitialState = {
   data: Board;
-  initialBoard: string[][];
+  initialBoard: number[][];
+  isSolved: boolean;
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 };
@@ -29,19 +33,28 @@ const initialState: InitialState = {
   data: {
     value: [[]],
     solution: [[]],
+    difficulty: null,
   },
   initialBoard: [[]],
+  isSolved: false,
   status: "idle",
   error: null,
 };
 
 export const board = createSlice({
   name: "board",
-  initialState: initialState,
+  initialState,
   reducers: {
-    changeCellValue: (state, action: PayloadAction<NewMove>) => {
-      const { x, y, value } = action.payload;
+    changeCellValue: (state, action: PayloadAction<Move>) => {
+      const { x, y, value } = action.payload as NewMove;
       state.data.value[y][x] = value;
+    },
+    checkBoard: (state) => {
+      const checkedBoard = state.data.value.map((row, y) =>
+        row.map((x) => state.data.solution[y][x] === state.data.value[y][x])
+      );
+
+      state.isSolved = !checkedBoard.flat().includes(false);
     },
   },
   extraReducers(builder) {
@@ -51,10 +64,15 @@ export const board = createSlice({
       })
       .addCase(
         fetchBoard.fulfilled,
-        (state, action: PayloadAction<BoardFetch>) => {
+        (state, action: PayloadAction<unknown>) => {
+          const payload = action.payload as BoardFetch;
           state.status = "succeeded";
-          state.data = action.payload.newboard.grids[0];
-          state.initialBoard = action.payload.newboard.grids[0].value;
+          state.data = payload.newboard.grids[0];
+          // fast finish for tests
+          // state.data.difficulty = payload.newboard.grids[0].difficulty;
+          // state.data.solution = payload.newboard.grids[0].solution;
+          // state.data.value = payload.newboard.grids[0].solution;
+          state.initialBoard = payload.newboard.grids[0].value;
         }
       )
       .addCase(fetchBoard.rejected, (state, action) => {
@@ -62,9 +80,8 @@ export const board = createSlice({
         state.error = action.error.message || null;
       })
       .addCase(undoMove, (state, action: PayloadAction<PrevValue>) => {
-        const { x, y, prevValue } = action.payload;
-        console.log(action.payload);
-        state.data.value[y][x] = prevValue;
+        const { x, y, prevValue: value } = action.payload;
+        state.data.value[y][x] = value;
       });
   },
 });
@@ -77,6 +94,6 @@ export const fetchBoard = createAsyncThunk("board/fetchBoard", async () => {
   return board;
 });
 
-export const { changeCellValue } = board.actions;
+export const { changeCellValue, checkBoard } = board.actions;
 
 export default board.reducer;

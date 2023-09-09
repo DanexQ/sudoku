@@ -1,22 +1,25 @@
-import React from "react";
 import { useAppSelector } from "../../hooks/useAppSelector";
-import { getLastMove, undoMove } from "../../redux/slices/moveHistorySlice";
+import { getPrevValue, undoMove } from "../../redux/slices/moveHistorySlice";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import Button from "../Button";
 
 const UndoButton = () => {
-  const lastMove = useAppSelector(getLastMove);
+  const prevValue = useAppSelector(getPrevValue);
   const dispatch = useAppDispatch();
 
   const handleClick = () => {
-    lastMove && dispatch(undoMove(lastMove));
+    prevValue && dispatch(undoMove(prevValue));
   };
 
-  return lastMove ? (
-    <Button className="button--undo" handleClick={handleClick}>
+  return (
+    <Button
+      className="button--undo"
+      handleClick={handleClick}
+      disabled={!!prevValue}
+    >
       Undo
     </Button>
-  ) : null;
+  );
 };
 
 export default UndoButton;

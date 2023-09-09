@@ -2,8 +2,8 @@ import { useRef } from "react";
 import "./cell.scss";
 
 type CellType = {
-  value: string;
-  handleClick: (prevValue: string) => void;
+  value: number;
+  handleClick: (prevValue: number) => void;
   handleRemoveListener: () => void;
   disabled: boolean;
 };

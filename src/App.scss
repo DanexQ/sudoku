@@ -5,6 +5,11 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  gap: 10px;
+  gap: 20px;
   background-color: rgb(23, 23, 23);
+
+  &-buttons {
+    display: flex;
+    gap: 10px;
+  }
 }

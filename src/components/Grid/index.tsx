@@ -12,7 +12,7 @@ const Grid = () => {
   const [typingMode, setTypingMode] = useState({
     typing: false,
     coordinates: { x: 0, y: 0 },
-    prevValue: "",
+    prevValue: 0,
   });
   const dispatch = useAppDispatch();
   const boardInitialized = useAppSelector((state) => state.board.initialBoard);
@@ -21,8 +21,8 @@ const Grid = () => {
   const keyPressEvent = useCallback(
     (event: KeyboardEvent) => {
       const numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-      const value = event.key;
-      if (!numbers.includes(+value)) {
+      const value = +event.key;
+      if (!numbers.includes(value)) {
         return;
       }
       const { x, y } = typingMode.coordinates;
@@ -39,7 +39,7 @@ const Grid = () => {
   }, [keyPressEvent]);
 
   const handleClick = (coordinates: { x: number; y: number }) => {
-    return (prevValue: string) =>
+    return (prevValue: number) =>
       setTypingMode({ typing: true, coordinates, prevValue });
   };
 
@@ -57,7 +57,7 @@ const Grid = () => {
         <div className="row" key={y}>
           {row.map((value, x) => (
             <Cell
-              key={x}
+              key={`${y}-${x}`}
               value={value}
               handleClick={handleClick({ x, y })}
               disabled={+boardInitialized[y][x] > 0}

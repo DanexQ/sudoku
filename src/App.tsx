@@ -1,10 +1,11 @@
 import { useEffect } from "react";
 import { useAppDispatch } from "./hooks/useAppDispatch";
 import { fetchBoard } from "./redux/slices/boardSlice";
-// import { useAppSelector } from "./hooks/useAppSelector";
 import Grid from "./components/Grid";
 import "./App.scss";
-import UndoMove from "./components/ButtonUndo";
+import ButtonUndo from "./components/ButtonUndo";
+import Difficulty from "./components/Difficulty";
+import ButtonCheckBoard from "./components/ButtonCheckBoard";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -14,8 +15,12 @@ function App() {
 
   return (
     <main className="container">
+      <Difficulty />
       <Grid />
-      <UndoMove />
+      <div className="container-buttons">
+        <ButtonUndo />
+        <ButtonCheckBoard />
+      </div>
     </main>
   );
 }
