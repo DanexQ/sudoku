@@ -6,21 +6,41 @@ import "./App.scss";
 import ButtonUndo from "./components/ButtonUndo";
 import Difficulty from "./components/Difficulty";
 import ButtonCheckBoard from "./components/ButtonCheckBoard";
+import { useAppSelector } from "./hooks/useAppSelector";
+import ButtonPlayAgain from "./components/ButtonPlayAgain";
 
 function App() {
+  const board = useAppSelector((state) => state.board);
+
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(fetchBoard());
   }, []);
 
+  if (board.status === "idle" || board.status === "loading")
+    return (
+      <main className="container">
+        <h2>Loading</h2>
+      </main>
+    );
+
   return (
     <main className="container">
-      <Difficulty />
-      <Grid />
-      <div className="container-buttons">
-        <ButtonUndo />
-        <ButtonCheckBoard />
-      </div>
+      {board.isSolved ? (
+        <>
+          <h2>Solved!</h2>
+          <ButtonPlayAgain />
+        </>
+      ) : (
+        <>
+          <Difficulty />
+          <Grid />
+          <div className="container-buttons">
+            <ButtonUndo />
+            <ButtonCheckBoard />
+          </div>
+        </>
+      )}
     </main>
   );
 }

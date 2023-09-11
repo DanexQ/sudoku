@@ -61,17 +61,18 @@ export const board = createSlice({
     builder
       .addCase(fetchBoard.pending, (state) => {
         state.status = "loading";
+        state.isSolved = false;
       })
       .addCase(
         fetchBoard.fulfilled,
         (state, action: PayloadAction<unknown>) => {
           const payload = action.payload as BoardFetch;
           state.status = "succeeded";
-          state.data = payload.newboard.grids[0];
+          // state.data = payload.newboard.grids[0];
           // fast finish for tests
-          // state.data.difficulty = payload.newboard.grids[0].difficulty;
-          // state.data.solution = payload.newboard.grids[0].solution;
-          // state.data.value = payload.newboard.grids[0].solution;
+          state.data.difficulty = payload.newboard.grids[0].difficulty;
+          state.data.solution = payload.newboard.grids[0].solution;
+          state.data.value = payload.newboard.grids[0].solution;
           state.initialBoard = payload.newboard.grids[0].value;
         }
       )
