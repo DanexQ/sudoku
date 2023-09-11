@@ -15,7 +15,7 @@ const UndoButton = () => {
     <Button
       className="button--undo"
       handleClick={handleClick}
-      disabled={!!prevValue}
+      disabled={!prevValue}
     >
       Undo
     </Button>

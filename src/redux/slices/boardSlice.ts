@@ -7,10 +7,11 @@ import { Move } from "./types";
 export type NewMove = Omit<Move, "prevValue">;
 
 type Difficulty = "Easy" | "Medium" | "Hard" | null;
+export type Cell = number | null;
 
 type Board = {
-  value: number[][];
-  solution: number[][];
+  value: Cell[][];
+  solution: Cell[][];
   difficulty: Difficulty;
 };
 
@@ -23,7 +24,7 @@ type BoardFetch = {
 
 type InitialState = {
   data: Board;
-  initialBoard: number[][];
+  initialBoard: Cell[][];
   isSolved: boolean;
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
@@ -51,7 +52,7 @@ export const board = createSlice({
     },
     checkBoard: (state) => {
       const checkedBoard = state.data.value.map((row, y) =>
-        row.map((x) => state.data.solution[y][x] === state.data.value[y][x])
+        row.map((_, x) => state.data.solution[y][x] === state.data.value[y][x])
       );
 
       state.isSolved = !checkedBoard.flat().includes(false);
@@ -68,12 +69,15 @@ export const board = createSlice({
         (state, action: PayloadAction<unknown>) => {
           const payload = action.payload as BoardFetch;
           state.status = "succeeded";
-          // state.data = payload.newboard.grids[0];
+          const initialBoard = payload.newboard.grids[0].value.map((row) =>
+            row.map((value) => (value === 0 ? null : value))
+          );
+          state.data = payload.newboard.grids[0];
           // fast finish for tests
-          state.data.difficulty = payload.newboard.grids[0].difficulty;
-          state.data.solution = payload.newboard.grids[0].solution;
-          state.data.value = payload.newboard.grids[0].solution;
-          state.initialBoard = payload.newboard.grids[0].value;
+          // state.data.difficulty = payload.newboard.grids[0].difficulty;
+          // state.data.solution = payload.newboard.grids[0].solution;
+          // state.data.value = payload.newboard.grids[0].solution;
+          state.initialBoard = initialBoard;
         }
       )
       .addCase(fetchBoard.rejected, (state, action) => {

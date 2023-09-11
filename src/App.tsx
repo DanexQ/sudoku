@@ -26,21 +26,18 @@ function App() {
 
   return (
     <main className="container">
-      {board.isSolved ? (
-        <>
-          <h2>Solved!</h2>
+      <Difficulty />
+      <Grid />
+      <div className="container_buttons">
+        {board.isSolved ? (
           <ButtonPlayAgain />
-        </>
-      ) : (
-        <>
-          <Difficulty />
-          <Grid />
-          <div className="container-buttons">
+        ) : (
+          <>
             <ButtonUndo />
             <ButtonCheckBoard />
-          </div>
-        </>
-      )}
+          </>
+        )}
+      </div>
     </main>
   );
 }

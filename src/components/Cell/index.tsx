@@ -1,9 +1,10 @@
 import { useRef } from "react";
 import "./cell.scss";
-
-type CellType = {
-  value: number;
-  handleClick: (prevValue: number) => void;
+import { useAppSelector } from "../../hooks/useAppSelector";
+import { Cell as CellType } from "../../redux/slices/boardSlice";
+type CellProps = {
+  value: number | null;
+  handleClick: (prevValue: CellType) => void;
   handleRemoveListener: () => void;
   disabled: boolean;
 };
@@ -13,22 +14,25 @@ const Cell = ({
   handleClick,
   handleRemoveListener,
   disabled,
-}: CellType) => {
+}: CellProps) => {
+  const isSolved = useAppSelector((state) => state.board.isSolved);
   const ref = useRef<HTMLInputElement>(null);
+  const disabledStyle = disabled ? "cell--disabled" : "cell--enabled";
+  const solvedStyle = isSolved ? "cell--solved" : "";
 
   return (
     <input
       ref={ref}
       type="text"
       inputMode="numeric"
-      value={value}
+      value={value || ""}
       onChange={() => {
         ref?.current?.blur();
       }}
-      className={`cell ${disabled ? "cell--disabled" : "cell--enabled"}`}
+      className={`cell ${disabledStyle} ${solvedStyle}`}
       onClick={() => handleClick(value)}
       onBlur={() => handleRemoveListener()}
-      disabled={disabled}
+      disabled={disabled || isSolved}
     />
   );
 };

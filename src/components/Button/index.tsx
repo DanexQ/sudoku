@@ -14,6 +14,7 @@ const Button = ({
   handleClick,
   disabled,
 }: ButtonType) => {
+  console.log(className, disabled);
   return (
     <button
       className={`button ${className}`}

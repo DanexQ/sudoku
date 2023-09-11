@@ -8,7 +8,11 @@
   gap: 20px;
   background-color: rgb(23, 23, 23);
 
-  &-buttons {
+  &--solved {
+    filter: brightness(80%);
+  }
+
+  &_buttons {
     display: flex;
     gap: 10px;
   }

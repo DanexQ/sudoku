@@ -1,5 +1,5 @@
 @mixin theme($theme) {
-  color: $theme;
+  color: $theme !important;
   border: 1px solid $theme;
   background-color: transparent;
 }
@@ -11,15 +11,20 @@
   text-transform: uppercase;
   border: none;
   cursor: pointer;
-  transition: all 0.1s;
+  transition: all 0.1s, color 0.5s;
   @include theme(rgb(229, 231, 235));
 
   &:hover {
     filter: brightness(80%);
   }
 
-  &:active {
+  &:active:enabled {
     transform: translateY(1px);
+  }
+
+  &:disabled {
+    @include theme(rgb(229, 231, 235));
+    opacity: 0.5;
   }
 
   &--undo {
@@ -29,7 +34,8 @@
   &--check-board {
     @include theme(rgb(34 197 94));
   }
+
   &--play-again {
-    @include theme(rgb(39, 135, 173));
+    @include theme(rgb(62, 200, 255));
   }
 }
